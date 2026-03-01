@@ -1,24 +1,24 @@
 # Expense Tracker API
 
-A RESTful API for managing personal expenses and income built with Spring Boot.
+A RESTful API for managing personal expenses built with Spring Boot.
 
-## Features
-
-- User authentication with JWT
-- Create, read, update, and delete transactions
-- Filter transactions by date range
-- Separate tracking for income and expenses
-- Secure endpoints with Spring Security
-
-## Technologies
+## Tech Stack
 
 - Java 17
 - Spring Boot 3.2.0
-- Spring Security
+- Spring Security with JWT Authentication
 - Spring Data JPA
 - H2 Database
-- JWT (JSON Web Tokens)
 - Maven
+- OpenAPI/Swagger UI
+
+## Features
+
+- User registration and authentication with JWT
+- Create, read, update, and delete expense transactions
+- Secure endpoints with Spring Security
+- API documentation with Swagger UI
+- H2 in-memory database with file persistence
 
 ## Prerequisites
 
@@ -27,14 +27,13 @@ A RESTful API for managing personal expenses and income built with Spring Boot.
 
 ## Getting Started
 
-### 1. Clone the repository
+### Build the project
 
 ```bash
-git clone <repository-url>
-cd expense-tracker-api
+mvn clean install
 ```
 
-### 2. Run the application
+### Run the application
 
 ```bash
 mvn spring-boot:run
@@ -42,108 +41,37 @@ mvn spring-boot:run
 
 The API will start on `http://localhost:8080`
 
-### 3. Access Swagger UI
+## API Documentation
 
-Open your browser and navigate to:
-```
-http://localhost:8080/swagger-ui.html
-```
+Access Swagger UI at: `http://localhost:8080/swagger-ui.html`
 
 ## API Endpoints
 
 ### Authentication
 
 - `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - Login and get JWT token
+- `POST /api/auth/login` - Login and receive JWT token
 
-### Transactions (Requires Authentication)
+### Transactions
 
-- `POST /api/transactions` - Create a new transaction
-- `GET /api/transactions` - Get all transactions
-- `GET /api/transactions/{id}` - Get transaction by ID
-- `PUT /api/transactions/{id}` - Update a transaction
-- `DELETE /api/transactions/{id}` - Delete a transaction
-- `GET /api/transactions/filter?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD` - Filter transactions by date range
-
-## Request Examples
-
-### Register User
-
-```json
-POST /api/auth/register
-{
-  "username": "john",
-  "email": "john@example.com",
-  "password": "password123"
-}
-```
-
-### Login
-
-```json
-POST /api/auth/login
-{
-  "username": "john",
-  "password": "password123"
-}
-```
-
-Response:
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-}
-```
-
-### Create Transaction
-
-```json
-POST /api/transactions
-Authorization: Bearer <token>
-
-{
-  "description": "Salary",
-  "amount": 50000,
-  "type": "INCOME",
-  "date": "2026-01-31"
-}
-```
+- `GET /api/transactions` - Get all transactions (authenticated)
+- `GET /api/transactions/{id}` - Get transaction by ID (authenticated)
+- `POST /api/transactions` - Create new transaction (authenticated)
+- `PUT /api/transactions/{id}` - Update transaction (authenticated)
+- `DELETE /api/transactions/{id}` - Delete transaction (authenticated)
 
 ## Database
 
-The application uses H2 in-memory database. Data is stored in the `data` folder.
+H2 Console: `http://localhost:8080/h2-console`
 
-### H2 Console (Optional)
-
-To enable H2 console, add to `application.properties`:
-```properties
-spring.h2.console.enabled=true
-```
-
-Access at: `http://localhost:8080/h2-console`
+- JDBC URL: `jdbc:h2:file:./data/expensedb`
+- Username: `sa`
+- Password: (empty)
 
 ## Configuration
 
-Edit `src/main/resources/application.properties` to configure:
+Edit `src/main/resources/application.properties` to customize:
 
 - Server port
 - Database settings
-- JWT secret key
-- JWT expiration time
-
-## Build for Production
-
-```bash
-mvn clean package
-java -jar target/expense-tracker-api-1.0.0.jar
-```
-
-## Security
-
-- All endpoints except `/api/auth/**` require JWT authentication
-- Add JWT token in Authorization header: `Bearer <token>`
-- Passwords are encrypted using BCrypt
-
-## License
-
-MIT License
+- JWT secret and expiration
